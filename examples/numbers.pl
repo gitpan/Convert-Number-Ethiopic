@@ -127,7 +127,7 @@ __END__
 
 =head1 NAME
 
-numbers.pl - Conversion Demonstration for 95 numbers.
+numbers.pl - Conversion demonstration for 95 numbers.
 
 =head1 SYNOPSIS
 

@@ -8,7 +8,7 @@ BEGIN
 	use strict;
 	use vars qw($VERSION @ENumbers %ENumbers);
 
-	$VERSION = '0.15';
+	$VERSION = "0.16";
 
 	require 5.000;
 
@@ -92,8 +92,8 @@ sub _fromEthiopic
 	#
 	#  tack on a ፩ to avoid special condition check
 	#
-	s/^([፻፼])/፩$1/;
-	s/፼፻/፼፩፻/g;
+	s/^([፻፼])/፩$1/o;
+	s/፼፻/፼፩፻/og;
 
 	# what we do now is pad 0s around ፻ and ፼, these regexi try to kill
 	# two birds with one stone but could be split and simplified
@@ -101,38 +101,38 @@ sub _fromEthiopic
 	#
 	# pad 0 around ones and tens
 	#
-	s/([፻፼])([፩-፱])/$1."0$2"/ge;    # add 0 if tens place empty
-	s/([፲-፺])([^፩-፱])/$1."0$2"/ge;  # add 0 if ones place empty
-	s/([፲-፺])\b/$1."0"/e;            # repeat at end of string
+	s/([፻፼])([፩-፱])/$1."0$2"/oge;    # add 0 if tens place empty
+	s/([፲-፺])([^፩-፱])/$1."0$2"/oge;  # add 0 if ones place empty
+	s/([፲-፺])\b/$1."0"/oe;           # repeat at end of string
 
 
 	# pad 0s for meto
 	#
 	#  s/(፻)$/$1."00"/e;  # this is stupid but tricks perl 5.6 into working
-	s/፻\b/፻00/;
+	s/፻\b/፻00/o;
 
 	# pad 0s for ilf
 	#
-	s/፼\b/፼0000/;
-	s/፼፼/፼0000፼/g;  # since /g doesn't work the first time..
-	s/፼፼/፼0000፼/g;  # ...we do it again!
-	s/፻፼/፼00፼/g;
-	s/፼0([፩-፱])፼/፼000$1፼/g;
-	s/፼0([፩-፱])\b/፼000$1/;          # repeat at end of string
-	s/፼([፲-፺]0)፼/፼00$1፼/g;
-	s/፼([፲-፺]0)\b/፼00$1/;           # repeat at end of string
-	s/፼([፩-፺]{2})፼/፼00$1፼/g;
-	s/፼([፩-፺]{2})\b/፼00$1/;         # repeat at end of string
+	s/፼\b/፼0000/o;
+	s/፼፼/፼0000፼/og;  # since /g doesn't work the first time..
+	s/፼፼/፼0000፼/og;  # ...we do it again!
+	s/፻፼/፼00፼/og;
+	s/፼0([፩-፱])፼/፼000$1፼/og;
+	s/፼0([፩-፱])\b/፼000$1/o;          # repeat at end of string
+	s/፼([፲-፺]0)፼/፼00$1፼/og;
+	s/፼([፲-፺]0)\b/፼00$1/o;           # repeat at end of string
+	s/፼([፩-፺]{2})፼/፼00$1፼/og;
+	s/፼([፩-፺]{2})\b/፼00$1/o;         # repeat at end of string
 
-	s/[፻፼]//g;
+	s/[፻፼]//og;
 
 	# fold tens:
 	#
-	tr/[፲-፺]/[፩-፱]/;
+	tr/፲-፺/፩-፱/;
 
 	# translit digits:
 	#
-	tr/[፩-፱]/[1-9]/;
+	tr/፩-፱/1-9/;
 
 	int $_;
 }
